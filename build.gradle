@@ -1,0 +1,33 @@
+apply plugin: 'scala'
+apply plugin: 'idea'
+
+repositories {
+  jcenter()
+}
+
+
+ext {
+  versions = [
+    scalaMajor: '2.11'
+  ]
+}
+
+
+dependencies {
+  // scala library
+  compile 'org.scala-lang:scala-library:2.11.7'
+
+  testCompile 'org.scalatest:scalatest_2.11:2.2.4'
+  testCompile 'org.scalacheck:scalacheck_2.11:1.12.5'
+  testCompile 'junit:junit:4.12'
+}
+
+
+// The gradle wrapper
+//task wrapper(type: wrapper) {
+//  gradleVersion = '2.10'
+//}
+
+
+// Tasks that will be run on 'gradle -q' command
+defaultTasks 'clean', 'build', 'assemble', 'jar'
