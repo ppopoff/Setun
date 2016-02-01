@@ -16,6 +16,10 @@ project/plugins/project/
 build/*
 .gradle/*
 
+# Idea specific
+.idea
+*.iml
+
 # Scala-IDE specific
 .scala_dependencies
 .worksheet
