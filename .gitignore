@@ -13,7 +13,8 @@ project/boot/
 project/plugins/project/
 
 # gradle specific
-build/*
+.build/*
+.gradle/*
 
 # Scala-IDE specific
 .scala_dependencies
