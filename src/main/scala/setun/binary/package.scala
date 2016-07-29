@@ -2,76 +2,68 @@ package setun
 
 import scala.language.implicitConversions
 
-
-
+/**
+  * The package contains Binary class that can be
+  * seen as enriched version of Boolean class
+  */
 package object binary {
 
   implicit def
-  enrichBoolean(bool: Boolean): EnrichedBoolean =  new EnrichedBoolean(bool)
+  enrichBoolean(bool: Boolean): Binary =  new Binary(bool)
 
   implicit def
-  narrowBoolean(e: EnrichedBoolean): Boolean = e.v
+  narrowBoolean(e: Binary): Boolean = e.v
 
 
   /** Unary operators, that can't be supported by unary_ */
-  def not (bool: EnrichedBoolean) = !bool
   def not (bool: Boolean) = !bool
-  def ¬ (bool: EnrichedBoolean) = !bool
+  def aint (bool: Boolean) = !bool
   def ¬ (bool: Boolean) = !bool
 
 
-  private[binary] implicit sealed
-  class EnrichedBoolean (val v: Boolean) extends AnyVal {
-
-    private type E = this.type
+  private[binary] implicit
+  class Binary (val v: Boolean) extends AnyVal {
 
     //Unary works for + - ! ~
-    def unary_~ = new EnrichedBoolean(!v)
-    def unary_! = new EnrichedBoolean(!v)
+    def unary_~ = new Binary(!v)
+    def unary_! = new Binary(!v)
 
+    def and (other: Binary) = new Binary(other && v)
+    def & (other: Binary) = and(other)
+    def ∧ (other: Binary) = and(other)
 
-    def and (other: E) = new EnrichedBoolean(other & v)
-    def & (other: E) = and(other)
-    def ∧ (other: E) = and(other)
+    def or (other: Binary) = new Binary(other || v)
+    def + (other: Binary) = or(other)
+    def ∨ (other: Binary) = or(other)
 
+    def xor (other: Binary) = new Binary(other ^ v)
+    def ⊕ (other: Binary) = xor(other)
 
-    def or (other: E) = new EnrichedBoolean(other | v)
-    def + (other: E) = or(other)
-    def ∨ (other: E) = or(other)
+    def equiv (p: Binary) = new Binary((!p || v) && (p || !v))
+    def xnor(other: Binary) = equiv(other)
+    def ==(other: Binary)   = equiv(other)
+    def <=>(other: Binary)  = equiv(other)
+    def ≡(other: Binary)    = equiv(other)
+    def ⇔(other: Binary)    = equiv(other)
 
-
-    def xor (other: E) = new EnrichedBoolean(other ^ v)
-    def ⊕ (other: E) = xor(other)
-    def ^ (other: E) = xor(other)
-
-
-    def equiv (p: E) = new EnrichedBoolean((!p || v) && (p || !v))
-    def xnor(other: EnrichedBoolean) = equiv(other)
-    def ==(other: EnrichedBoolean)   = equiv(other)
-    def <=>(other: EnrichedBoolean)  = equiv(other)
-    def ≡(other: EnrichedBoolean)    = equiv(other)
-    def ⇔(other: EnrichedBoolean)    = equiv(other)
-
-
-    def implies(other: E) = new EnrichedBoolean((!v) & other)
-    def →(other: EnrichedBoolean)  = implies(other)
-    def ->(other: EnrichedBoolean) = implies(other)
-    def ⊃(other: EnrichedBoolean)  = implies(other)
+    def implies(other: Binary) = new Binary((!v) & other)
+    def →(other: Binary)  = implies(other)
+    def ->(other: Binary) = implies(other)
+    def ⊃(other: Binary)  = implies(other)
 
 
     /**
-      * Sheffer stoke == nand
+      * Sheffer's stoke == nand
       */
-    def nand(other: E) = new EnrichedBoolean(!(other & v))
-    def ↑(other: EnrichedBoolean) = nand(other)
-    def |(other: EnrichedBoolean) = nand(other)
-
+    def nand(other: Binary) = new Binary(!(narrowBoolean(other) & v))
+    def ↑(other: Binary) = nand(other)
+    def |(other: Binary) = nand(other)
 
     /**
       * Peirce's arrow ↓ nor
       */
-    def nor(other: E) = new EnrichedBoolean(!(other | v))
-    def ↓(other: EnrichedBoolean) = nor(other)
-    def dagger(other: EnrichedBoolean) = nor(other)
+    def nor(other: Binary) = new Binary(!(other || v))
+    def ↓(other: Binary) = nor(other)
+    def dagger(other: Binary) = nor(other)
   }
 }
