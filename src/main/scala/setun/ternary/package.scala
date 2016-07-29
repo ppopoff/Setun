@@ -5,35 +5,35 @@ package setun
   * contains Ternary logic and supported
   * operations
   */
-package object ternary {
+package object logical {
 
-  sealed trait Ternary
-  case object True  extends Ternary
-  case object False extends Ternary
-  case object Maybe extends Ternary
+  sealed trait Logical
+  case object True  extends Logical
+  case object False extends Logical
+  case object Maybe extends Logical
 
-  def unary_!(t: Ternary) = not(t)
-  def ¬ (t: Ternary) = not(t)
-  def ait(t: Ternary) = not(t)
-  def negate(t: Ternary) = not(t)
+  def unary_!(t: Logical) = not(t)
+  def ¬ (t: Logical) = not(t)
+  def ait(t: Logical) = not(t)
+  def negate(t: Logical) = not(t)
 
-  def not (t: Ternary) = t match {
+  def not (t: Logical) = t match {
     case True  => False
     case Maybe => Maybe
     case False => True
   }
 
 
-  implicit class TernaryOps(t: Ternary) {
-    def && (other: Ternary) = t and other
-    def || (other: Ternary) = t or other
+  implicit class TernaryOps(t: Logical) {
+    def && (other: Logical) = t and other
+    def || (other: Logical) = t or other
 
-    def ∧ (other: Ternary) = t and other
-    def ∨ (other: Ternary) = t or other
-    def ≡ (other: Ternary) = t equiv other
-    def ⊃ (other: Ternary) = t imply other
+    def ∧ (other: Logical) = t and other
+    def ∨ (other: Logical) = t or other
+    def ≡ (other: Logical) = t equiv other
+    def ⊃ (other: Logical) = t imply other
 
-    def and (other: Ternary) = (t, other) match {
+    def and (other: Logical) = (t, other) match {
       case (True, True)   => True
       case (True, Maybe)  => Maybe
       case (True, False)  => False
@@ -45,10 +45,10 @@ package object ternary {
       case (Maybe, False) => False
     }
 
-    def or (other: Ternary) = (t, other) match {
-      case (True, True) => True
-      case (True, Maybe) => True
-      case (True, False) => True
+    def or (other: Logical) = (t, other) match {
+      case (True, True)   => True
+      case (True, Maybe)  => True
+      case (True, False)  => True
       case (Maybe, True)  => True
       case (Maybe, Maybe) => Maybe
       case (Maybe, False) => Maybe
@@ -57,7 +57,7 @@ package object ternary {
       case (False, False) => False
     }
 
-    def equiv(other: Ternary) = (t, other) match {
+    def equiv(other: Logical) = (t, other) match {
       case (True, True)   => True
       case (True, Maybe)  => Maybe
       case (True, False)  => False
@@ -69,8 +69,7 @@ package object ternary {
       case (False, False) => True
     }
 
-
-    def imply(other: Ternary) = (t, other) match {
+    def imply(other: Logical) = (t, other) match {
       case (True, True)   => True
       case (True, Maybe)  => Maybe
       case (True, False)  => False
